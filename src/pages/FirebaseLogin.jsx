@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+} from "firebase/auth";
 import { auth } from "../firebase";
 import { useNavigate } from "react-router-dom";
 
@@ -8,12 +12,23 @@ function FirebaseLogin() {
   const [password, setPassword] = useState("");
 
   const navigate = useNavigate();
+  const googleProvider = new GoogleAuthProvider();
+
+const handleGoogleLogin = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider);
+    alert("✅ Google Login Successful");
+    navigate("/patient");
+  } catch (error) {
+    alert(error.message);
+  }
+};
 
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       alert("✅ Login Successful");
-      navigate("/login");
+      navigate("/patient");
     } catch (error) {
       alert(error.message);
     }
@@ -49,6 +64,12 @@ function FirebaseLogin() {
         >
           Login
         </button>
+        <button
+  onClick={handleGoogleLogin}
+  className="w-full mt-4 bg-red-500 hover:bg-red-600 p-3 rounded font-bold text-white"
+>
+  Continue with Google
+</button>
 
       </div>
     </div>
