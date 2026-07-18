@@ -80,7 +80,7 @@ function DoctorDashboard() {
   </h2>
 
   <QRCode
-    value="http://localhost:5176/"
+    value="https://smart-queue-ai-sage.vercel.app/"
     size={180}
     bgColor="#ffffff"
     fgColor="#000000"
