@@ -14,21 +14,38 @@ function FirebaseLogin() {
   const navigate = useNavigate();
   const googleProvider = new GoogleAuthProvider();
 
-const handleGoogleLogin = async () => {
-  try {
-    await signInWithPopup(auth, googleProvider);
-    alert("✅ Google Login Successful");
-    navigate("/patient");
-  } catch (error) {
-    alert(error.message);
-  }
-};
+  // Google Login (Patient)
+  const handleGoogleLogin = async () => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      alert("✅ Google Login Successful");
+      navigate("/patient");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
+  // Email Login (Doctor / Admin)
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      alert("✅ Login Successful");
-      navigate("/patient");
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const userEmail = userCredential.user.email;
+
+      if (userEmail === "doctor@smartqueue.com") {
+        alert("✅ Doctor Login Successful");
+        navigate("/doctor");
+      } else if (userEmail === "admin@smartqueue.com") {
+        alert("✅ Admin Login Successful");
+        navigate("/admin");
+      } else {
+        alert("✅ Patient Login Successful");
+        navigate("/patient");
+      }
     } catch (error) {
       alert(error.message);
     }
@@ -60,16 +77,17 @@ const handleGoogleLogin = async () => {
 
         <button
           onClick={handleLogin}
-          className="w-full mt-6 bg-cyan-500 hover:bg-cyan-600 p-3 rounded font-bold"
+          className="w-full mt-6 bg-cyan-500 hover:bg-cyan-600 p-3 rounded font-bold text-white"
         >
           Login
         </button>
+
         <button
-  onClick={handleGoogleLogin}
-  className="w-full mt-4 bg-red-500 hover:bg-red-600 p-3 rounded font-bold text-white"
->
-  Continue with Google
-</button>
+          onClick={handleGoogleLogin}
+          className="w-full mt-4 bg-red-500 hover:bg-red-600 p-3 rounded font-bold text-white"
+        >
+          Continue with Google
+        </button>
 
       </div>
     </div>

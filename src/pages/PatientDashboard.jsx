@@ -15,6 +15,16 @@ function PatientDashboard() {
 const [userEmail, setUserEmail] = useState("");
 
   const { queue, setQueue } = useContext(QueueContext);
+  useEffect(() => {
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    if (user) {
+      setUserName(user.displayName || "Patient");
+      setUserEmail(user.email || "");
+    }
+  });
+
+  return () => unsubscribe();
+}, []);
  
 
  const joinQueue = async () => {
@@ -61,6 +71,7 @@ setWaitTime(`${estimatedTime} min`);
 };
 const handleLogout = async () => {
   await signOut(auth);
+  window.location.href = "/";
 };
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
