@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useContext } from "react";
 import { QueueContext } from "../context/QueueContext";
-import { signOut } from "firebase/auth";
+import { signOut, onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
@@ -11,8 +11,11 @@ function PatientDashboard() {
   const [waitTime, setWaitTime] = useState("-");
   const [status, setStatus] = useState("Not Joined");
   const [patientName, setPatientName] = useState("");
+  const [userName, setUserName] = useState("");
+const [userEmail, setUserEmail] = useState("");
 
   const { queue, setQueue } = useContext(QueueContext);
+ 
 
  const joinQueue = async () => {
   if (!patientName.trim()) {
@@ -64,6 +67,13 @@ const handleLogout = async () => {
       <h1 className="text-4xl font-bold text-cyan-400">
         Patient Dashboard
       </h1>
+      <p className="text-xl mt-3">
+  👋 Welcome, <span className="text-cyan-400 font-bold">{userName}</span>
+</p>
+
+<p className="text-gray-400 mb-6">
+  {userEmail}
+</p>
 
       <div className="mt-10 grid md:grid-cols-3 gap-6">
 
