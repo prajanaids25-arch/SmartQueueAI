@@ -1,4 +1,18 @@
+import { useEffect, useState } from "react";
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+
 function AdminDashboard() {
+  const [patients, setPatients] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "queue"), (snapshot) => {
+      setPatients(snapshot.size);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-950 text-white p-8">
       <h1 className="text-4xl font-bold text-cyan-400">
@@ -9,17 +23,17 @@ function AdminDashboard() {
 
         <div className="bg-slate-900 p-6 rounded-2xl">
           <h2 className="text-xl font-bold">Patients Waiting</h2>
-          <p className="text-5xl mt-4 text-yellow-400">32</p>
+          <p className="text-5xl mt-4 text-yellow-400">{patients}</p>
         </div>
 
         <div className="bg-slate-900 p-6 rounded-2xl">
           <h2 className="text-xl font-bold">Emergency Cases</h2>
-          <p className="text-5xl mt-4 text-red-400">3</p>
+          <p className="text-5xl mt-4 text-red-400">0</p>
         </div>
 
         <div className="bg-slate-900 p-6 rounded-2xl">
           <h2 className="text-xl font-bold">Doctors Available</h2>
-          <p className="text-5xl mt-4 text-green-400">12</p>
+          <p className="text-5xl mt-4 text-green-400">1</p>
         </div>
 
       </div>
